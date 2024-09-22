@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ResultType;
 
-public class Error
+public record Error(string Code, string Description)
 {
+    public static Error None => new(string.Empty, string.Empty);
 }
