@@ -9,15 +9,17 @@
 
         public static Option<T> Some(T value) => new(value);
 
-        public static Option<T> None() => new(default);
+        public static Option<T> None() => new(null);
 
         public Option<TOut> Map<TOut>(Func<T, TOut> map) where TOut : class =>
             _value is null ? Option<TOut>.None() : Option<TOut>.Some(map(_value));
+
+        public ValueOption<TOut> MapValue<TOut>(Func<T, TOut> map) where TOut : struct =>
+            _value is null ? ValueOption<TOut>.None() : ValueOption<TOut>.Some(map(_value));
 
         public Option<TOut> Bind<TOut>(Func<T, Option<TOut>> bind) where TOut : class =>
             _value is null ? Option<TOut>.None() : bind(_value);
 
         public TOut Match<TOut>(Func<T, TOut> some, Func<TOut> none) => _value is null ? none() : some(_value);
-
     }
 }
