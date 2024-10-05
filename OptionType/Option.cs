@@ -21,5 +21,19 @@
             _value is null ? Option<TOut>.None() : bind(_value);
 
         public TOut Match<TOut>(Func<T, TOut> some, Func<TOut> none) => _value is null ? none() : some(_value);
+
+        public void Match<TOut>(Action<T> some, Action none)
+        {
+            if (_value is not null)
+                some(_value);
+            else
+                none();
+        }
+
+        public Option<T> Filter(Func<T, bool> filter) => _value is not null && filter(_value) ? Some(_value) : None();
+            
+        public T ValueOrThrow() => _value ?? throw new InvalidOperationException("No value present");
+
+        public T ValueOr(Func<T> valueProvider) => _value ?? valueProvider();
     }
 }
